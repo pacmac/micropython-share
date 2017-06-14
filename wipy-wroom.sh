@@ -33,7 +33,6 @@ cd "$ROOTDIR/$UPYDIR"
 make -C mpy-cross
 
 cd "$ROOTDIR/$UPYDIR/esp32"
-osxcln # Cleanup OSX ._DS files.
 
 ## Edit the pins.csv file.
 mv boards/WIPY/pins.csv boards/WIPY/pins.csv.orig 
