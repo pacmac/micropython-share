@@ -145,9 +145,11 @@ class SH1106_I2C(SH1106):
     self.i2c = i2c
     self.addr = addr
     self.res = res
-    self.temp1 = bytearray(1)
-    self.temp1[0] = 0x40
     self.temp = bytearray(2)
+    if hasattr(self.i2c, "start"):
+      self.write_data = self.sw_write_data
+    else:
+      self.write_data = self.hw_write_data  
     res.init(res.OUT, value=1)
     super().__init__(width, height, external_vcc)
 
@@ -156,16 +158,16 @@ class SH1106_I2C(SH1106):
     self.temp[1] = cmd
     self.i2c.writeto(self.addr, self.temp)
 
-  def write_data(self, buf):
-    try:
-      self.i2c.writeto(self.addr, b'\x40'+buf)
-    except:
-      self.temp[0] = self.addr << 1
-      self.temp[1] = 0x40 # Co=0, D/C#=1
-      self.i2c.start()
-      self.i2c.write(self.temp)
-      self.i2c.write(buf)
-      self.i2c.stop()
+  def hw_write_data(self, buf):
+    self.i2c.writeto(self.addr, b'\x40'+buf)
+
+  def sw_write_data(self, buf):
+    self.temp[0] = self.addr << 1
+    self.temp[1] = 0x40 # Co=0, D/C#=1
+    self.i2c.start()
+    self.i2c.write(self.temp)
+    self.i2c.write(buf)
+    self.i2c.stop()
   
   def reset(self):
     super().reset(self.res)
