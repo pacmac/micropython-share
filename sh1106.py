@@ -43,7 +43,7 @@
 # display.sleep(False)
 # display.fill(0)
 # display.text('Testing 1', 0, 0, 1)
-# display.show()
+# display.vpage()
 
 from micropython import const
 import time
