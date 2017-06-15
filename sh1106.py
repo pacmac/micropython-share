@@ -150,7 +150,8 @@ class SH1106_I2C(SH1106):
       self.write_data = self.sw_write_data
     else:
       self.write_data = self.hw_write_data  
-    res.init(res.OUT, value=1)
+    if res is not None:
+      res.init(res.OUT, value=1)
     super().__init__(width, height, external_vcc)
 
   def write_cmd(self, cmd):
