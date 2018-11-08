@@ -7,7 +7,6 @@ class WWW:
     self.port = port
     self.sock = socket.socket()
     self.count = 0
-    self.home = '/index.htm' 
     
   def head(self,path=''):
     ctype = "text/css"
@@ -15,6 +14,8 @@ class WWW:
     return b"HTTP/1.1 200 OK\r\nContent-Type:%s; charset=utf-8\r\nServer:microPython,\r\n\r\n" % (ctype)
     
   def page(self,req,res):
+    if req['path'] == '/': 
+      req['path'] = '/index.htm'
     with open(self.fdir+req['path'], 'rb') as html:
       chead = self.head(req['path']) 
       chunk =  chead + html.read(256-len(chead))
@@ -41,16 +42,9 @@ class WWW:
       req = {
         "addr": bits[1],
         "head": [],
-        "path": '',
-        "get": ''
+        "path": None,
+        "get": res.readline().decode('UTF-8').rstrip()
       }
-
-      get = res.readline()
-      if get:
-        bits = get.decode('UTF-8').rstrip().split(' ')
-        if len(bits) == 3: #['GET', '/', 'HTTP/1.1']
-          req['method'], req['path'],req['ver'] = bits
-          if req['path'] == '/': req['path'] = self.home 
 
       while True:
         h = res.readline()
@@ -59,8 +53,7 @@ class WWW:
         else:
           req['head'].append(h.decode('UTF-8').rstrip())
       
-      if req['path']:
-        self.request(req,res)
+      self.request(req,res)
       res.close()
 
 
