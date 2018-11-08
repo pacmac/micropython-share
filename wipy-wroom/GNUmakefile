@@ -1,7 +1,7 @@
-#include ../../idfpath
-IDFPATH=/nfs/qnap/data/uPython/pycom/pycom-esp-idf
+# IDFPATH=/nfs/qnap/data/uPython/pycom/pycom-esp-idf
 
-# ESPPORT ?= /dev/tty.SLAB_USBtoUART
-# ESPFLASHMODE = dio
+## ONLY CONTROLLABLE VARS
+# ESPPORT=/dev/ttyUSB0
+# ESPBAUD=921600
 
 include Makefile
