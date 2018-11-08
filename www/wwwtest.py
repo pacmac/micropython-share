@@ -41,7 +41,8 @@ class WWW:
       req = {
         "addr": bits[1],
         "head": [],
-        "path": ''
+        "path": '',
+        "get": ''
       }
 
       get = res.readline()
