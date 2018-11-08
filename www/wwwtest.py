@@ -42,9 +42,15 @@ class WWW:
       req = {
         "addr": bits[1],
         "head": [],
-        "path": None,
-        "get": res.readline().decode('UTF-8').rstrip()
+        "path": ''
       }
+
+      get = res.readline()
+      if get:
+        bits = get.decode('UTF-8').rstrip().split(' ')
+        if len(bits) == 3: #['GET', '/', 'HTTP/1.1']
+          req['method'], req['path'],req['ver'] = bits
+          if req['path'] == '/': req['path'] = self.home 
 
       while True:
         h = res.readline()
@@ -53,7 +59,8 @@ class WWW:
         else:
           req['head'].append(h.decode('UTF-8').rstrip())
       
-      self.request(req,res)
+      if req['path']:
+        self.request(req,res)
       res.close()
 
 
