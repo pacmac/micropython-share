@@ -7,6 +7,7 @@ class WWW:
     self.port = port
     self.sock = socket.socket()
     self.count = 0
+    self.home = '/index.htm' 
     
   def head(self,path=''):
     ctype = "text/css"
@@ -14,8 +15,6 @@ class WWW:
     return b"HTTP/1.1 200 OK\r\nContent-Type:%s; charset=utf-8\r\nServer:microPython,\r\n\r\n" % (ctype)
     
   def page(self,req,res):
-    if req['path'] == '/': 
-      req['path'] = '/index.htm'
     with open(self.fdir+req['path'], 'rb') as html:
       chead = self.head(req['path']) 
       chunk =  chead + html.read(256-len(chead))
