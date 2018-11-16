@@ -24,8 +24,10 @@ class WWW:
         chunk = html.read(256)
     
   def request(self,req,res):
-    req['method'],req['path'],_ = req['get'].split(' ')  #['GET', '/', 'HTTP/1.1']
-    self.page(req,res)
+    bits = req['get'].split(' ') 
+    if len(bits) == 3:
+      req['method'],req['path'],_ = bits   #['GET', '/', 'HTTP/1.1']
+      self.page(req,res)
 
   def serve(self):
     ai = socket.getaddrinfo("0.0.0.0", self.port)
